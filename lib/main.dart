@@ -10,7 +10,7 @@ void main() {
     <bookshelf>
       <book>
         <title lang="english">Growing a Language</title>
-        <price>29.89</price>
+        <price>29.99</price>
       </book>
       <book>
         <title lang="english">Learning XML</title>
