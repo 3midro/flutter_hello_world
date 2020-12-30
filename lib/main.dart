@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:xml/xml.dart';
+import 'dart:async';
+
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   //runApp(MyApp());
@@ -21,6 +25,26 @@ void main() {
   final document = XmlDocument.parse(bookshelfXml);
   print(document.toString());
   print(document.toXmlString(pretty: true, indent: '\t'));
+  //creaDB();
+}
+
+void creaDB() async {
+  final database = openDatabase(
+    // Establecer la ruta a la base de datos. Nota: Usando la función `join` del
+    // complemento `path` es la mejor práctica para asegurar que la ruta sea correctamente
+    // construida para cada plataforma.
+    join(await getDatabasesPath(), 'doggie_database1.db'),
+    // Cuando la base de datos se crea por primera vez, crea una tabla para almacenar dogs
+    onCreate: (db, version) {
+      return db.execute(
+        "CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",
+      );
+    },
+    // Establece la versión. Esto ejecuta la función onCreate y proporciona una
+    // ruta para realizar actualizacones y defradaciones en la base de datos.
+    version: 3,
+  );
+  print("Creo BD");
 }
 
 class TabBarDemo extends StatelessWidget {
@@ -45,17 +69,133 @@ class TabBarDemo extends StatelessWidget {
           body: TabBarView(
             children: [
               MyApp2(),
-              //Icon(Icons.directions_car),
               RegisterPage(),
-              //Icon(Icons.directions_transit),
-
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bus),
+              Form1(),
+              Form2(),
               //Icon(Icons.directions_ferry),
               MyApp(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// Crea un Widget Form 1
+class Form1 extends StatefulWidget {
+  @override
+  MyForm1 createState() {
+    return MyForm1();
+  }
+}
+
+class MyForm1 extends State<Form1> {
+  final _formKey = GlobalKey<FormState>();
+  // GlobalKey<FormState> keyForm = new GlobalKey();
+  TextEditingController nombreCtrl = new TextEditingController();
+  TextEditingController edadCtrl = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            controller: nombreCtrl,
+            decoration: InputDecoration(
+              labelText: 'Nombre',
+            ),
+            /* validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+            }, */
+          ),
+          TextFormField(
+            controller: edadCtrl,
+            decoration: InputDecoration(
+              labelText: 'Edad',
+            ),
+            keyboardType: TextInputType.phone,
+            maxLength: 2,
+            /* validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+            },*/
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50.0),
+            child: RaisedButton(
+              onPressed: () {
+                // devolverá true si el formulario es válido, o falso si
+                // el formulario no es válido.
+                if (_formKey.currentState.validate()) {
+                  // Si el formulario es válido, queremos mostrar un Snackbar
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  //leer el formulario
+                  print("Nombre ${nombreCtrl.text}");
+                  print("Apellido ${edadCtrl.text}");
+                  //mandarlo a sql lite
+                  save2SQLlite();
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Crea un Widget Form 2
+class Form2 extends StatefulWidget {
+  @override
+  MyForm2 createState() {
+    return MyForm2();
+  }
+}
+
+class MyForm2 extends State<Form2> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: RaisedButton(
+              onPressed: () {
+                // devolverá true si el formulario es válido, o falso si
+                // el formulario no es válido.
+                if (_formKey.currentState.validate()) {
+                  // Si el formulario es válido, queremos mostrar un Snackbar
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  // debe guardar en base de datos sqllite
+
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -433,7 +573,105 @@ class _RegisterPageState extends State<RegisterPage> {
       print("Nombre ${nameCtrl.text}");
       print("Telefono ${mobileCtrl.text}");
       print("Correo ${emailCtrl.text}");
+
       //keyForm.currentState.reset();
     }
   }
+}
+
+class Dog {
+  final int id;
+  final String name;
+  final int age;
+
+  Dog({this.id, this.name, this.age});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'age': age,
+    };
+  }
+
+  // Implementa toString para que sea más fácil ver información sobre cada perro
+  // usando la declaración de impresión.
+  @override
+  String toString() {
+    return 'Dog{id: $id, name: $name, age: $age}';
+  }
+}
+
+void save2SQLlite() async {
+  print("guardar en sqllite");
+
+  final database = openDatabase(
+    // Establecer la ruta a la base de datos. Nota: Usando la función `join` del
+    // complemento `path` es la mejor práctica para asegurar que la ruta sea correctamente
+    // construida para cada plataforma.
+    join(await getDatabasesPath(), 'doggie_database.db'),
+    // Cuando la base de datos se crea por primera vez, crea una tabla para almacenar dogs
+    onCreate: (db, version) {
+      return db.execute(
+        "CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",
+      );
+    },
+    // Establece la versión. Esto ejecuta la función onCreate y proporciona una
+    // ruta para realizar actualizacones y defradaciones en la base de datos.
+    version: 3,
+  );
+
+  // A continuación, define la función para insertar dogs en la base de datos
+  Future<void> insertDog(Dog dog) async {
+    // Obtiene una referencia de la base de datos
+    final Database db = await database;
+
+    // Inserta el Dog en la tabla correcta. También puede especificar el
+    // `conflictAlgorithm` para usar en caso de que el mismo Dog se inserte dos veces.
+    // En este caso, reemplaza cualquier dato anterior.
+    await db.insert(
+      'dogs',
+      dog.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+// Ahora, puedes crear un Dog y agregarlo a la tabla dogs!
+  final fido = Dog(
+    id: 0,
+    name: 'Fido',
+    age: 35,
+  );
+
+  final pelusa = Dog(
+    id: 1,
+    name: 'pelusa',
+    age: 20,
+  );
+
+  await insertDog(fido);
+  await insertDog(pelusa);
+
+// Un método que recupera todos los dogs de la tabla dogs
+  Future<List<Dog>> dogs() async {
+    // Obtiene una referencia de la base de datos
+    final Database db = await database;
+
+    // Consulta la tabla por todos los Dogs.
+    final List<Map<String, dynamic>> maps = await db.query('dogs');
+
+    // Convierte List<Map<String, dynamic> en List<Dog>.
+    return List.generate(maps.length, (i) {
+      return Dog(
+        row: maps[i]['ROWID'],
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        age: maps[i]['age'],
+      );
+    });
+  }
+
+// Ahora, puedes usar el método anterior para recuperar todos los dogs!
+  print("lista de perros");
+  print(await dogs()); // Imprime una lista que contiene a Fido
 }
