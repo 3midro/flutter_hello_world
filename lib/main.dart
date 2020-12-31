@@ -741,7 +741,6 @@ void save2SQLlite() async {
     // Convierte List<Map<String, dynamic> en List<Dog>.
     return List.generate(maps.length, (i) {
       return Dog(
-        row: maps[i]['ROWID'],
         id: maps[i]['id'],
         name: maps[i]['name'],
         age: maps[i]['age'],
