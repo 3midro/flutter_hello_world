@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:xml/xml.dart';
-import 'dart:async';
+import 'package:hello_world/database_helper.dart';
+//import 'dart:async';
 
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+//import 'package:path/path.dart';
+//import 'package:sqflite/sqflite.dart';
 
 void main() {
   //runApp(MyApp());
@@ -26,9 +27,10 @@ void main() {
   print(document.toString());
   print(document.toXmlString(pretty: true, indent: '\t'));
   //creaDB();
+  final dbHelper = DatabaseHelper.instance;
 }
 
-void creaDB() async {
+/*void creaDB() async {
   final database = openDatabase(
     // Establecer la ruta a la base de datos. Nota: Usando la función `join` del
     // complemento `path` es la mejor práctica para asegurar que la ruta sea correctamente
@@ -45,7 +47,7 @@ void creaDB() async {
     version: 3,
   );
   print("Creo BD");
-}
+}*/
 
 class TabBarDemo extends StatelessWidget {
   @override
@@ -91,6 +93,8 @@ class Form1 extends StatefulWidget {
 }
 
 class MyForm1 extends State<Form1> {
+  
+  final dbHelper = DatabaseHelper.instance;
   final _formKey = GlobalKey<FormState>();
   // GlobalKey<FormState> keyForm = new GlobalKey();
   TextEditingController nombreCtrl = new TextEditingController();
@@ -117,18 +121,17 @@ class MyForm1 extends State<Form1> {
           TextFormField(
             controller: edadCtrl,
             decoration: InputDecoration(
-              labelText: 'Edad',
+              labelText: 'Apellido',
             ),
-            keyboardType: TextInputType.phone,
-            maxLength: 2,
+            //keyboardType: TextInputType.phone,
+            //maxLength: 2,
             /* validator: (value) {
               if (value.isEmpty) {
                 return 'Please enter some text';
               }
             },*/
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50.0),
+          Center(
             child: RaisedButton(
               onPressed: () {
                 // devolverá true si el formulario es válido, o falso si
@@ -141,17 +144,58 @@ class MyForm1 extends State<Form1> {
                   print("Nombre ${nombreCtrl.text}");
                   print("Apellido ${edadCtrl.text}");
                   //mandarlo a sql lite
-                  save2SQLlite();
+                  //save2SQLlite();
+                  _insert(nombreCtrl.text,edadCtrl.text);
                 }
               },
-              child: Text('Submit'),
+              child: Text('INSERTAR'),
+            ),
+            ),
+          Center(
+            child: RaisedButton(
+              onPressed: () {
+                //Ver contenido BD sqlite
+                  _ver();
+              },
+              child: Text('VER'),
+            ),
+          ),
+          Center(
+            child: RaisedButton(
+              onPressed: () {
+                //Eliminar Registro
+                  _borrar();
+              },
+              child: Text('BORRAR'),
             ),
           ),
         ],
       ),
     );
   }
+void _insert(String a, String b) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnNombre : a,
+    DatabaseHelper.columnApellido : b
+  };
+  final id = await dbHelper.insert("my_table",row);
+  print("Se inserto el ID -> $id");
 }
+void _ver() async{
+  final allRows = await dbHelper.queryAllRows("my_table");
+  print("Contenido de la BD");
+  allRows.forEach((row) => print(row));
+}
+void _borrar() async {
+    final id = await dbHelper.queryRowCount("my_table");
+    final rowsDeleted = await dbHelper.delete("my_table",id);
+    print("Se borraron $rowsDeleted registros con el id -> $id");
+}
+
+}
+
 
 // Crea un Widget Form 2
 class Form2 extends StatefulWidget {
@@ -163,7 +207,10 @@ class Form2 extends StatefulWidget {
 
 class MyForm2 extends State<Form2> {
   final _formKey = GlobalKey<FormState>();
+  final dbHelper = DatabaseHelper.instance;
 
+  TextEditingController deporteCtrl = new TextEditingController();
+  TextEditingController edadCtrl = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -172,33 +219,69 @@ class MyForm2 extends State<Form2> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-            },
+            controller: deporteCtrl,
+            decoration: InputDecoration(
+              labelText: 'Deporte',
+            ),
+          ),TextFormField(
+            controller: edadCtrl,
+            decoration: InputDecoration(
+              labelText: 'Edad',
+            ),
+            keyboardType: TextInputType.phone,
+            maxLength: 2,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+          Center(
             child: RaisedButton(
               onPressed: () {
-                // devolverá true si el formulario es válido, o falso si
-                // el formulario no es válido.
-                if (_formKey.currentState.validate()) {
-                  // Si el formulario es válido, queremos mostrar un Snackbar
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                  // debe guardar en base de datos sqllite
-
-                }
+                _insert(deporteCtrl.text,edadCtrl.text);
               },
-              child: Text('Submit'),
+              child: Text('INSERTAR'),
+            ),
+          ),
+          Center(
+            child: RaisedButton(
+              onPressed: () {
+                //Ver contenido BD sqlite
+                  _ver();
+              },
+              child: Text('VER'),
+            ),
+          ),
+          Center(
+            child: RaisedButton(
+              onPressed: () {
+                //Eliminar Registro
+                  _borrar();
+              },
+              child: Text('BORRAR'),
             ),
           ),
         ],
       ),
     );
   }
+  void _insert(String a, String b) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnDeporte : a,
+    DatabaseHelper.columnEdad : b
+  };
+  final id = await dbHelper.insert("deportes",row);
+  print("Se inserto el ID -> $id");
+}
+void _ver() async{
+  final allRows = await dbHelper.queryAllRows("deportes");
+  print("Contenido de la BD");
+  allRows.forEach((row) => print(row));
+}
+void _borrar() async {
+    final id = await dbHelper.queryRowCount("deportes");
+    final rowsDeleted = await dbHelper.delete("deportes",id);
+    print("Se borraron $rowsDeleted registros con el id -> $id");
+}
+
 }
 
 // Crea un Widget Form
@@ -228,19 +311,12 @@ class MyCustomFormState extends State<MyCustomForm> {
               }
             },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+          Center(
             child: RaisedButton(
               onPressed: () {
-                // devolverá true si el formulario es válido, o falso si
-                // el formulario no es válido.
-                if (_formKey.currentState.validate()) {
-                  // Si el formulario es válido, queremos mostrar un Snackbar
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                }
+                
               },
-              child: Text('Submit'),
+              child: Text('INSERTAR'),
             ),
           ),
         ],
@@ -579,7 +655,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-class Dog {
+
+
+/*class Dog {
   final int id;
   final String name;
   final int age;
@@ -674,4 +752,4 @@ void save2SQLlite() async {
 // Ahora, puedes usar el método anterior para recuperar todos los dogs!
   print("lista de perros");
   print(await dogs()); // Imprime una lista que contiene a Fido
-}
+}*/
