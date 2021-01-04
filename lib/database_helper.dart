@@ -6,21 +6,28 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   
-  static final _databaseName = "MyDatabase2.db";
-  static final _databaseVersion = 2;
+  static final _databaseName = "MyDatabase.db";
+  static final _databaseVersion = 3;
 
-  static final table = 'my_table';
-  static final table2 = 'deportes';
+  static final tableDatos = 'table_datos';
+  static final tableDeportes = 'table_deportes';
+  static final tableOpciones = 'table_opciones';
   
-  //tabla 1
+  //tabla_datos
   static final columnId = '_id';
   static final columnNombre = 'nombre';
   static final columnApellido = 'apellido';
 
-  //tabla 2
+  //tabla_deportes
   static final columnIdDeporte = '_idDep';
   static final columnDeporte = 'deporte';
   static final columnEdad = 'edad';
+
+  //tabla_opciones
+  static final columnIdopc = '_idOpc';
+  static final columnTransporte = 'transporte';
+  static final columnColor = 'color';
+  static final columnTam = 'tamanio';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -47,17 +54,25 @@ class DatabaseHelper {
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-          CREATE TABLE $table (
+          CREATE TABLE $tableDatos (
             $columnId INTEGER PRIMARY KEY,
             $columnNombre TEXT NOT NULL,
             $columnApellido INTEGER NOT NULL
           )
           ''');
     await db.execute('''
-          CREATE TABLE $table2 (
+          CREATE TABLE $tableDeportes (
             $columnIdDeporte INTEGER PRIMARY KEY,
             $columnDeporte TEXT NOT NULL,
             $columnEdad INTEGER NOT NULL
+          )
+          ''');
+    await db.execute('''
+          CREATE TABLE $tableOpciones (
+            $columnIdopc INTEGER PRIMARY KEY,
+            $columnTransporte TEXT NOT NULL,
+            $columnColor TEXT NOT NULL,
+            $columnTam TEXT NOT NULL
           )
           ''');
   }
@@ -81,9 +96,9 @@ class DatabaseHelper {
 
   // All of the methods (insert, query, update, delete) can also be done using
   // raw SQL commands. This method uses a raw query to give the row count.
-  Future<int> queryRowCount(String table2) async {
+  Future<int> queryRowCount(String table) async {
     Database db = await instance.database;
-    return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table2'));
+    return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
   // We are assuming here that the id column in the map is set. The other 
@@ -91,13 +106,23 @@ class DatabaseHelper {
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await instance.database;
     int id = row[columnId];
-    return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
+    return await db.update(tableDatos, row, where: '$columnId = ?', whereArgs: [id]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is 
   // returned. This should be 1 as long as the row exists.
-  Future<int> delete(String table2,int id) async {
+  Future<int> delete(String table,int id) async {
     Database db = await instance.database;
-    return await db.delete(table2, where: '$columnId = ?', whereArgs: [id]);
+    return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteDeporte(String table,int id) async {
+    Database db = await instance.database;
+    return await db.delete(table, where: '$columnIdDeporte = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteOpciones(String table,int id) async {
+    Database db = await instance.database;
+    return await db.delete(table, where: '$columnIdopc = ?', whereArgs: [id]);
   }
 }

@@ -27,7 +27,6 @@ void main() {
   print(document.toString());
   print(document.toXmlString(pretty: true, indent: '\t'));
   //creaDB();
-  final dbHelper = DatabaseHelper.instance;
 }
 
 /*void creaDB() async {
@@ -180,19 +179,20 @@ void _insert(String a, String b) async {
     DatabaseHelper.columnNombre : a,
     DatabaseHelper.columnApellido : b
   };
-  final id = await dbHelper.insert("my_table",row);
+  final id = await dbHelper.insert("table_datos",row);
   print("Se inserto el ID -> $id");
 }
 void _ver() async{
-  final allRows = await dbHelper.queryAllRows("my_table");
+  final allRows = await dbHelper.queryAllRows("table_datos");
   print("Contenido de la BD");
   allRows.forEach((row) => print(row));
 }
 void _borrar() async {
-    final id = await dbHelper.queryRowCount("my_table");
-    final rowsDeleted = await dbHelper.delete("my_table",id);
+    final id = await dbHelper.queryRowCount("table_datos");
+    final rowsDeleted = await dbHelper.delete("table_datos",id);
     print("Se borraron $rowsDeleted registros con el id -> $id");
 }
+
 
 }
 
@@ -268,18 +268,18 @@ class MyForm2 extends State<Form2> {
     DatabaseHelper.columnDeporte : a,
     DatabaseHelper.columnEdad : b
   };
-  final id = await dbHelper.insert("deportes",row);
-  print("Se inserto el ID -> $id");
+  final idDep = await dbHelper.insert("table_deportes",row);
+  print("Se inserto el ID -> $idDep");
 }
 void _ver() async{
-  final allRows = await dbHelper.queryAllRows("deportes");
+  final allRows = await dbHelper.queryAllRows("table_deportes");
   print("Contenido de la BD");
   allRows.forEach((row) => print(row));
 }
 void _borrar() async {
-    final id = await dbHelper.queryRowCount("deportes");
-    final rowsDeleted = await dbHelper.delete("deportes",id);
-    print("Se borraron $rowsDeleted registros con el id -> $id");
+    final idDep = await dbHelper.queryRowCount("table_deportes");
+    final rowsDeleted = await dbHelper.deleteDeporte("table_deportes",idDep);
+    print("Se borraron $rowsDeleted registros con el id -> $idDep");
 }
 
 }
@@ -347,113 +347,250 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final appTitle = 'Probar Radio buttons';
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: MyCustomRadio(),
+        resizeToAvoidBottomPadding: false,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+// Crea un Widget Form
+class MyCustomRadio extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyCustomRadioFormState createState() {
+    return MyCustomRadioFormState();
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+// Crea una clase State correspondiente. Esta clase contendrá los datos relacionados con
+// el formulario.
+class MyCustomRadioFormState extends State<MyCustomRadio> {
+  final _formKey = GlobalKey<FormState>();
+  final dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+    return MaterialApp(
+      home: new Scaffold(
+        body: new SingleChildScrollView(
+          child: new Container(
+            margin: new EdgeInsets.all(60.0),
+            child: new Form(
+              key: _formKey,
+              child: formUI(),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+  formItemsDesign(icon, item) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 7),
+      child: Card(child: ListTile(leading: Icon(icon), title: item)),
+    );
+  }
+
+String color = 'azul';
+String transporte = 'carro';
+String tamanio = 'chico';
+
+  Widget formUI() {
+    return Column(
+      children: <Widget>[
+        formItemsDesign(
+            Icons.emoji_transportation,
+            Column(children: <Widget>[
+              Text("Transporte"),
+              RadioListTile<String>(
+                title: Text('Carro'),
+                value: 'carro',
+                groupValue: transporte,
+                onChanged: (value) {
+                  setState(() {
+                    transporte = value;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('Bici'),
+                value: 'Bici',
+                groupValue: transporte,
+                onChanged: (value) {
+                  setState(() {
+                    transporte = value;
+                  });
+                },
+              )
+            ])),
+        formItemsDesign(
+            Icons.color_lens,
+            Column(children: <Widget>[
+              Text("Color"),
+              RadioListTile<String>(
+                title: Text('Azul'),
+                value: 'azul',
+                groupValue: color,
+                onChanged: (value) {
+                  setState(() {
+                    color = value;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('Rojo'),
+                value: 'rojo',
+                groupValue: color,
+                onChanged: (value) {
+                  setState(() {
+                    color = value;
+                  });
+                },
+              )
+            ])),
+            formItemsDesign(
+            Icons.photo_size_select_large,
+            Column(children: <Widget>[
+              Text("Tamaño"),
+              RadioListTile<String>(
+                title: Text('Chico'),
+                value: 'chico',
+                groupValue: tamanio,
+                onChanged: (value) {
+                  setState(() {
+                    tamanio = value;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('Medio'),
+                value: 'medio',
+                groupValue: tamanio,
+                onChanged: (value) {
+                  setState(() {
+                    tamanio = value;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('Largo'),
+                value: 'largo',
+                groupValue: tamanio,
+                onChanged: (value) {
+                  setState(() {
+                    tamanio = value;
+                  });
+                },
+              )
+            ])),
+        GestureDetector(
+            onTap: () {
+              /*print('El Transporte es -> ${transporte.toString()}');
+              print('El color es -> ${color.toString()}');
+              print('El Tamaño es -> ${tamanio.toString()}');*/
+              _insert(transporte.toString(),color.toString(),tamanio.toString());
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Insertar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            ),
+            GestureDetector(
+            onTap: () {
+              _ver();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Ver",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            ),
+            GestureDetector(
+            onTap: () {
+              _borrar();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Borrar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            )
+      ],
+    );
+  }
+
+void _insert(String a, String b, String c) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnTransporte : a,
+    DatabaseHelper.columnColor : b,
+    DatabaseHelper.columnTam : c,
+  };
+  final idOpc = await dbHelper.insert("table_opciones",row);
+  print("Se inserto el ID -> $idOpc");
 }
+
+void _ver() async{
+  final allRows = await dbHelper.queryAllRows("table_opciones");
+  print("Contenido de la BD");
+  allRows.forEach((row) => print(row));
+}
+void _borrar() async {
+    final idOpc = await dbHelper.queryRowCount("table_opciones");
+    final rowsDeleted = await dbHelper.deleteOpciones("table_opciones",idOpc);
+    print("Se borraron $rowsDeleted registros con el id -> $idOpc");
+}
+
+}
+
 
 class RegisterPage extends StatefulWidget {
   @override
