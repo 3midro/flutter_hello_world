@@ -71,8 +71,8 @@ class TabBarDemo extends StatelessWidget {
             children: [
               MyApp2(),
               RegisterPage(),
-              Form1(),
-              Form2(),
+              Formulario1(),
+              Formulario2(),
               //Icon(Icons.directions_ferry),
               MyApp(),
             ],
@@ -83,13 +83,25 @@ class TabBarDemo extends StatelessWidget {
   }
 }
 
-// Crea un Widget Form 1
-class Form1 extends StatefulWidget {
+class Formulario1 extends StatelessWidget {
   @override
-  MyForm1 createState() {
-    return MyForm1();
+  Widget build(BuildContext context) {
+    final appTitle = 'Formulario 1';
+
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: Form1(),
+        resizeToAvoidBottomPadding: false,
+      ),
+    );
   }
 }
+
+
 
 class MyForm1 extends State<Form1> {
   
@@ -130,44 +142,77 @@ class MyForm1 extends State<Form1> {
               }
             },*/
           ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                // devolverá true si el formulario es válido, o falso si
-                // el formulario no es válido.
-                if (_formKey.currentState.validate()) {
-                  // Si el formulario es válido, queremos mostrar un Snackbar
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                  //leer el formulario
-                  print("Nombre ${nombreCtrl.text}");
-                  print("Apellido ${edadCtrl.text}");
-                  //mandarlo a sql lite
-                  //save2SQLlite();
-                  _insert(nombreCtrl.text,edadCtrl.text);
-                }
-              },
-              child: Text('INSERTAR'),
+          GestureDetector(
+            onTap: () {
+              /*print('El Transporte es -> ${transporte.toString()}');
+              print('El color es -> ${color.toString()}');
+              print('El Tamaño es -> ${tamanio.toString()}');*/
+              _insert(nombreCtrl.text,edadCtrl.text);
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Insertar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
             ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                //Ver contenido BD sqlite
-                  _ver();
-              },
-              child: Text('VER'),
+            GestureDetector(
+            onTap: () {
+              _ver();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Ver",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-          ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                //Eliminar Registro
-                  _borrar();
-              },
-              child: Text('BORRAR'),
             ),
-          ),
+          GestureDetector(
+            onTap: () {
+              _borrar();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Borrar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            )
         ],
       ),
     );
@@ -196,6 +241,23 @@ void _borrar() async {
 
 }
 
+class Formulario2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appTitle = 'Formulario 2';
+
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: Form2(),
+        resizeToAvoidBottomPadding: false,
+      ),
+    );
+  }
+}
 
 // Crea un Widget Form 2
 class Form2 extends StatefulWidget {
@@ -231,32 +293,77 @@ class MyForm2 extends State<Form2> {
             keyboardType: TextInputType.phone,
             maxLength: 2,
           ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                _insert(deporteCtrl.text,edadCtrl.text);
-              },
-              child: Text('INSERTAR'),
+          GestureDetector(
+            onTap: () {
+              /*print('El Transporte es -> ${transporte.toString()}');
+              print('El color es -> ${color.toString()}');
+              print('El Tamaño es -> ${tamanio.toString()}');*/
+              _insert(deporteCtrl.text,edadCtrl.text);
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Insertar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-          ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                //Ver contenido BD sqlite
-                  _ver();
-              },
-              child: Text('VER'),
             ),
-          ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                //Eliminar Registro
-                  _borrar();
-              },
-              child: Text('BORRAR'),
+          GestureDetector(
+            onTap: () {
+              _ver();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Ver",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-          ),
+            ),
+          GestureDetector(
+            onTap: () {
+              _borrar();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Borrar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            )
         ],
       ),
     );
@@ -292,10 +399,20 @@ class MyCustomForm extends StatefulWidget {
   }
 }
 
+// Crea un Widget Form 1
+class Form1 extends StatefulWidget {
+  @override
+  MyForm1 createState() {
+    return MyForm1();
+  }
+}
+
 // Crea una clase State correspondiente. Esta clase contendrá los datos relacionados con
 // el formulario.
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
+  final dbHelper = DatabaseHelper.instance;
+  TextEditingController textoCtrl = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -305,25 +422,112 @@ class MyCustomFormState extends State<MyCustomForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
+            controller: textoCtrl,
+            decoration: new InputDecoration(
+                labelText: 'Escribe Texto',
+              ),
+            validator: (textoCtrl) {
+              if (textoCtrl.isEmpty) {
+                return 'Porfavor escribe algo';
               }
             },
           ),
-          Center(
-            child: RaisedButton(
-              onPressed: () {
-                
-              },
-              child: Text('INSERTAR'),
+          GestureDetector(
+            onTap: () {
+              _insert(textoCtrl.text);
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Insertar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-          ),
+            ),
+            GestureDetector(
+            onTap: () {
+              _ver();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Ver",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            ),
+            GestureDetector(
+            onTap: () {
+              _borrar();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Borrar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            )
         ],
       ),
     );
   }
+
+  void _insert(String texto) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnTxt : texto
+  };
+  final idOpc = await dbHelper.insert("table_texto",row);
+  print("Se inserto el ID -> $idOpc");
 }
+
+void _ver() async{
+  final allRows = await dbHelper.queryAllRows("table_texto");
+  print("Contenido de la BD");
+  allRows.forEach((row) => print(row));
+}
+void _borrar() async {
+    final idOpc = await dbHelper.queryRowCount("table_texto");
+    final rowsDeleted = await dbHelper.deleteTexto("table_texto",idOpc);
+    print("Se borraron $rowsDeleted registros con el id -> $idOpc");
+}
+
+}
+
 
 class MyApp2 extends StatelessWidget {
   @override
@@ -599,6 +803,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> keyForm = new GlobalKey();
+  final dbHelper = DatabaseHelper.instance;
   TextEditingController nameCtrl = new TextEditingController();
   TextEditingController emailCtrl = new TextEditingController();
   TextEditingController mobileCtrl = new TextEditingController();
@@ -717,7 +922,7 @@ class _RegisterPageState extends State<RegisterPage> {
               save();
             },
             child: Container(
-              margin: new EdgeInsets.all(30.0),
+              margin: new EdgeInsets.all(10.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -728,6 +933,50 @@ class _RegisterPageState extends State<RegisterPage> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               child: Text("Guardar",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+            )),
+            GestureDetector(
+            onTap: () {
+              _ver();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Ver",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+            )),
+            GestureDetector(
+            onTap: () {
+              _borrar();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("Borrar",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -783,13 +1032,35 @@ class _RegisterPageState extends State<RegisterPage> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      print("Nombre ${nameCtrl.text}");
-      print("Telefono ${mobileCtrl.text}");
-      print("Correo ${emailCtrl.text}");
-
+      _insert(nameCtrl.text,mobileCtrl.text,gender.toString(),emailCtrl.text,passwordCtrl.text,repeatPassCtrl.text);
       //keyForm.currentState.reset();
     }
   }
+  void _insert(String n, String t, String g, String e, String p, String rp) async {
+  //row to insert
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnName : n,
+    DatabaseHelper.columnTel : t,
+    DatabaseHelper.columnGen : g,
+    DatabaseHelper.columnEmail : e,
+    DatabaseHelper.columnPass : p,
+    DatabaseHelper.columnPassrep : rp,
+  };
+  final idOpc = await dbHelper.insert("table_registro",row);
+  print("Se inserto el ID -> $idOpc");
+}
+
+void _ver() async{
+  final allRows = await dbHelper.queryAllRows("table_registro");
+  print("Contenido de la BD");
+  allRows.forEach((row) => print(row));
+}
+void _borrar() async {
+    final idOpc = await dbHelper.queryRowCount("table_registro");
+    final rowsDeleted = await dbHelper.deleteRegistro("table_registro",idOpc);
+    print("Se borraron $rowsDeleted registros con el id -> $idOpc");
+}
+
 }
 
 

@@ -7,27 +7,43 @@ import 'package:path_provider/path_provider.dart';
 class DatabaseHelper {
   
   static final _databaseName = "MyDatabase.db";
-  static final _databaseVersion = 3;
+  static final _databaseVersion = 6;
 
   static final tableDatos = 'table_datos';
   static final tableDeportes = 'table_deportes';
   static final tableOpciones = 'table_opciones';
+  static final tableRegistro = 'table_registro';
+  static final tableTexto = 'table_texto';
   
-  //tabla_datos
+  //table_datos
   static final columnId = '_id';
   static final columnNombre = 'nombre';
   static final columnApellido = 'apellido';
 
-  //tabla_deportes
+  //table_deportes
   static final columnIdDeporte = '_idDep';
   static final columnDeporte = 'deporte';
   static final columnEdad = 'edad';
 
-  //tabla_opciones
+  //table_opciones
   static final columnIdopc = '_idOpc';
   static final columnTransporte = 'transporte';
   static final columnColor = 'color';
   static final columnTam = 'tamanio';
+
+  //table_registro
+  static final columnIdreg = '_idReg';
+  static final columnName = 'name';
+  static final columnTel = 'tel';
+  static final columnEmail = 'email';
+  static final columnPass = 'pass';
+  static final columnPassrep = 'passRep';
+  static final columnGen = 'genero';
+
+  //table_texto
+  static final columnIdTxt = '_idAlgo';
+  static final columnTxt = 'texto';
+
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -75,8 +91,25 @@ class DatabaseHelper {
             $columnTam TEXT NOT NULL
           )
           ''');
+    await db.execute('''
+          CREATE TABLE $tableRegistro (
+            $columnIdreg INTEGER PRIMARY KEY,
+            $columnName TEXT NOT NULL,
+            $columnTel INTEGER NOT NULL,
+            $columnGen TEXT NOT NULL,
+            $columnEmail TEXT NOT NULL,
+            $columnPass TEXT NOT NULL,
+            $columnPassrep TEXT NOT NULL
+          )
+          ''');
+    await db.execute('''
+          CREATE TABLE $tableTexto (
+            $columnIdTxt INTEGER PRIMARY KEY,
+            $columnTxt TEXT NOT NULL
+          )
+          ''');
   }
-  
+
   // Helper methods
 
   // Inserts a row in the database where each key in the Map is a column name
@@ -124,5 +157,15 @@ class DatabaseHelper {
   Future<int> deleteOpciones(String table,int id) async {
     Database db = await instance.database;
     return await db.delete(table, where: '$columnIdopc = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteRegistro(String table,int id) async {
+    Database db = await instance.database;
+    return await db.delete(table, where: '$columnIdreg = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteTexto(String table,int id) async {
+    Database db = await instance.database;
+    return await db.delete(table, where: '$columnIdTxt = ?', whereArgs: [id]);
   }
 }
