@@ -7,11 +7,39 @@ import 'package:hello_world/database_helper.dart';
 //import 'package:path/path.dart';
 //import 'package:sqflite/sqflite.dart';
 
-void main() {
+void main() =>
   //runApp(MyApp());
   runApp(TabBarDemo());
+  
+  //form1
+  TextEditingController textoCtrl = new TextEditingController();
 
-  final bookshelfXml = '''<?xml version="1.0"?>
+  //form2
+  TextEditingController nameCtrl = new TextEditingController();
+  TextEditingController mobileCtrl = new TextEditingController();
+  String gender = 'hombre';
+  TextEditingController emailCtrl = new TextEditingController();
+  TextEditingController passwordCtrl = new TextEditingController();
+  TextEditingController repeatPassCtrl = new TextEditingController();
+
+  //form3
+  TextEditingController nombreCtrl = new TextEditingController();
+  TextEditingController apeCtrl = new TextEditingController();
+
+  //form4
+  TextEditingController deporteCtrl = new TextEditingController();
+  TextEditingController edadCtrl = new TextEditingController();
+
+  //form5
+  String color = 'azul';
+  String transporte = 'carro';
+  String tamanio = 'chico';
+
+  //coneccion DB
+  final dbHelper = DatabaseHelper.instance;
+  
+
+  /*final bookshelfXml = '''<?xml version="1.0"?>
     <bookshelf>
       <book>
         <title lang="english">Growing a Language</title>
@@ -27,7 +55,7 @@ void main() {
   print(document.toString());
   print(document.toXmlString(pretty: true, indent: '\t'));
   //creaDB();
-}
+}*/
 
 /*void creaDB() async {
   final database = openDatabase(
@@ -103,13 +131,11 @@ class Formulario1 extends StatelessWidget {
 
 
 
-class MyForm1 extends State<Form1> {
+class MyForm1 extends State<Form1> { 
   
-  final dbHelper = DatabaseHelper.instance;
+  //final dbHelper = DatabaseHelper.instance;
   final _formKey = GlobalKey<FormState>();
   // GlobalKey<FormState> keyForm = new GlobalKey();
-  TextEditingController nombreCtrl = new TextEditingController();
-  TextEditingController edadCtrl = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +156,7 @@ class MyForm1 extends State<Form1> {
             }, */
           ),
           TextFormField(
-            controller: edadCtrl,
+            controller: apeCtrl,
             decoration: InputDecoration(
               labelText: 'Apellido',
             ),
@@ -142,12 +168,12 @@ class MyForm1 extends State<Form1> {
               }
             },*/
           ),
-          GestureDetector(
+          /*GestureDetector(
             onTap: () {
               /*print('El Transporte es -> ${transporte.toString()}');
               print('El color es -> ${color.toString()}');
               print('El Tamaño es -> ${tamanio.toString()}');*/
-              _insert(nombreCtrl.text,edadCtrl.text);
+              _insert(nombreCtrl.text,apeCtrl.text);
             },
             child: Container(
               margin: new EdgeInsets.all(10.0),
@@ -167,12 +193,13 @@ class MyForm1 extends State<Form1> {
                       fontWeight: FontWeight.w500)),
               padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-            ),
+            ),*/
             GestureDetector(
             onTap: () {
               _ver();
             },
             child: Container(
+              margin: new EdgeInsets.all(20.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -212,11 +239,13 @@ class MyForm1 extends State<Form1> {
                       fontWeight: FontWeight.w500)),
               padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-            )
+            ),
         ],
       ),
     );
   }
+  
+
 void _insert(String a, String b) async {
   //row to insert
   //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
@@ -269,10 +298,8 @@ class Form2 extends StatefulWidget {
 
 class MyForm2 extends State<Form2> {
   final _formKey = GlobalKey<FormState>();
-  final dbHelper = DatabaseHelper.instance;
+  //final dbHelper = DatabaseHelper.instance;
 
-  TextEditingController deporteCtrl = new TextEditingController();
-  TextEditingController edadCtrl = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -288,12 +315,12 @@ class MyForm2 extends State<Form2> {
           ),TextFormField(
             controller: edadCtrl,
             decoration: InputDecoration(
-              labelText: 'Edad',
+              labelText: 'Numero',
             ),
             keyboardType: TextInputType.phone,
             maxLength: 2,
           ),
-          GestureDetector(
+          /*GestureDetector(
             onTap: () {
               /*print('El Transporte es -> ${transporte.toString()}');
               print('El color es -> ${color.toString()}');
@@ -318,12 +345,13 @@ class MyForm2 extends State<Form2> {
                       fontWeight: FontWeight.w500)),
               padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-            ),
+            ),*/
           GestureDetector(
             onTap: () {
               _ver();
             },
             child: Container(
+              margin: new EdgeInsets.all(10.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -411,8 +439,7 @@ class Form1 extends StatefulWidget {
 // el formulario.
 class MyCustomFormState extends State<MyCustomForm> {
   final _formKey = GlobalKey<FormState>();
-  final dbHelper = DatabaseHelper.instance;
-  TextEditingController textoCtrl = new TextEditingController();
+  //final dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -432,7 +459,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               }
             },
           ),
-          GestureDetector(
+          /*GestureDetector(
             onTap: () {
               _insert(textoCtrl.text);
             },
@@ -454,12 +481,13 @@ class MyCustomFormState extends State<MyCustomForm> {
                       fontWeight: FontWeight.w500)),
               padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-            ),
+            ),*/
             GestureDetector(
             onTap: () {
               _ver();
             },
             child: Container(
+              margin: new EdgeInsets.all(10.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -578,7 +606,7 @@ class MyCustomRadio extends StatefulWidget {
 // el formulario.
 class MyCustomRadioFormState extends State<MyCustomRadio> {
   final _formKey = GlobalKey<FormState>();
-  final dbHelper = DatabaseHelper.instance;
+  //final dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -603,9 +631,7 @@ class MyCustomRadioFormState extends State<MyCustomRadio> {
     );
   }
 
-String color = 'azul';
-String transporte = 'carro';
-String tamanio = 'chico';
+
 
   Widget formUI() {
     return Column(
@@ -695,7 +721,7 @@ String tamanio = 'chico';
                 },
               )
             ])),
-        GestureDetector(
+        /*GestureDetector(
             onTap: () {
               /*print('El Transporte es -> ${transporte.toString()}');
               print('El color es -> ${color.toString()}');
@@ -720,12 +746,13 @@ String tamanio = 'chico';
                       fontWeight: FontWeight.w500)),
               padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-            ),
+            ),*/
             GestureDetector(
             onTap: () {
               _ver();
             },
             child: Container(
+              margin: new EdgeInsets.all(10.0),
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -765,7 +792,30 @@ String tamanio = 'chico';
                       fontWeight: FontWeight.w500)),
               padding: EdgeInsets.only(top: 10, bottom: 10),
             ),
-            )
+            ),
+            GestureDetector(
+            onTap: () {
+              guardarInfo();
+            },
+            child: Container(
+              margin: new EdgeInsets.all(10.0),
+              alignment: Alignment.center,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                gradient: LinearGradient(colors: [
+                  Color(0xFF0EDED2),
+                  Color(0xFF03A0FE),
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              child: Text("GUARDAR INFORMACION",
+                  style: TextStyle(
+                      color: Colors. black87,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500)),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+            ),
+            ),
       ],
     );
   }
@@ -793,6 +843,89 @@ void _borrar() async {
     print("Se borraron $rowsDeleted registros con el id -> $idOpc");
 }
 
+void guardarInfo() async{
+  if(textoCtrl.text.isNotEmpty && nameCtrl.text.isNotEmpty && mobileCtrl.text.isNotEmpty &&
+    emailCtrl.text.isNotEmpty && passwordCtrl.text.isNotEmpty && repeatPassCtrl.text.isNotEmpty &&
+    nombreCtrl.text.isNotEmpty && apeCtrl.text.isNotEmpty && deporteCtrl.text.isNotEmpty && edadCtrl.text.isNotEmpty
+    ){
+  insertarForm1(textoCtrl.text);
+  insertarForm2(nameCtrl.text,mobileCtrl.text,gender.toString(),emailCtrl.text,passwordCtrl.text,repeatPassCtrl.text);
+  insertarForm3(nombreCtrl.text,apeCtrl.text);
+  insertarForm4(deporteCtrl.text,edadCtrl.text);
+  insertarForm5(transporte.toString(),color.toString(),tamanio.toString());
+  textoCtrl.clear();
+  nameCtrl.clear();
+  mobileCtrl.clear();
+  emailCtrl.clear();
+  passwordCtrl.clear();
+  repeatPassCtrl.clear();
+  nombreCtrl.clear();
+  apeCtrl.clear();
+  deporteCtrl.clear();
+  edadCtrl.clear();
+    }else{
+      print('Un campo viene vacio, no se puede insertar');
+    }
+}
+
+void insertarForm1(String texto) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnTxt : texto
+  };
+  final idOpc = await dbHelper.insert("table_texto",row);
+  print("Se inserto el ID -> $idOpc");
+}
+
+void insertarForm2(String n, String t, String g, String e, String p, String rp) async {
+  //row to insert
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnName : n,
+    DatabaseHelper.columnTel : t,
+    DatabaseHelper.columnGen : g,
+    DatabaseHelper.columnEmail : e,
+    DatabaseHelper.columnPass : p,
+    DatabaseHelper.columnPassrep : rp,
+  };
+  final idOpc = await dbHelper.insert("table_registro",row);
+  print("Se inserto el ID -> $idOpc");
+}
+
+void insertarForm3(String a, String b) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnNombre : a,
+    DatabaseHelper.columnApellido : b
+  };
+  final id = await dbHelper.insert("table_datos",row);
+  print("Se inserto el ID -> $id");
+}
+
+void insertarForm4(String a, String b) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnDeporte : a,
+    DatabaseHelper.columnEdad : b
+  };
+  final idDep = await dbHelper.insert("table_deportes",row);
+  print("Se inserto el ID -> $idDep");
+}
+
+void insertarForm5(String a, String b, String c) async {
+  //row to insert
+  //print("El valor de a es: ${a.toString()} y el valor de b es: ${b.toString()}");
+  Map<String, dynamic> row = {
+    DatabaseHelper.columnTransporte : a,
+    DatabaseHelper.columnColor : b,
+    DatabaseHelper.columnTam : c,
+  };
+  final idOpc = await dbHelper.insert("table_opciones",row);
+  print("Se inserto el ID -> $idOpc");
+}
+
 }
 
 
@@ -803,12 +936,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   GlobalKey<FormState> keyForm = new GlobalKey();
-  final dbHelper = DatabaseHelper.instance;
-  TextEditingController nameCtrl = new TextEditingController();
-  TextEditingController emailCtrl = new TextEditingController();
-  TextEditingController mobileCtrl = new TextEditingController();
-  TextEditingController passwordCtrl = new TextEditingController();
-  TextEditingController repeatPassCtrl = new TextEditingController();
+  //final dbHelper = DatabaseHelper.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -837,7 +965,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  String gender = 'hombre';
+  
 
   Widget formUI() {
     return Column(
@@ -926,18 +1054,18 @@ class _RegisterPageState extends State<RegisterPage> {
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
+                    borderRadius: BorderRadius.circular(50.0)),
                 gradient: LinearGradient(colors: [
                   Color(0xFF0EDED2),
                   Color(0xFF03A0FE),
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
-              child: Text("Guardar",
+              child: Text("Verificar",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500)),
-              padding: EdgeInsets.only(top: 16, bottom: 16),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             )),
             GestureDetector(
             onTap: () {
@@ -948,7 +1076,7 @@ class _RegisterPageState extends State<RegisterPage> {
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
+                    borderRadius: BorderRadius.circular(50.0)),
                 gradient: LinearGradient(colors: [
                   Color(0xFF0EDED2),
                   Color(0xFF03A0FE),
@@ -959,7 +1087,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500)),
-              padding: EdgeInsets.only(top: 16, bottom: 16),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             )),
             GestureDetector(
             onTap: () {
@@ -970,7 +1098,7 @@ class _RegisterPageState extends State<RegisterPage> {
               alignment: Alignment.center,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
+                    borderRadius: BorderRadius.circular(50.0)),
                 gradient: LinearGradient(colors: [
                   Color(0xFF0EDED2),
                   Color(0xFF03A0FE),
@@ -981,7 +1109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w500)),
-              padding: EdgeInsets.only(top: 16, bottom: 16),
+              padding: EdgeInsets.only(top: 10, bottom: 10),
             ))
       ],
     );
@@ -1032,7 +1160,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   save() {
     if (keyForm.currentState.validate()) {
-      _insert(nameCtrl.text,mobileCtrl.text,gender.toString(),emailCtrl.text,passwordCtrl.text,repeatPassCtrl.text);
+      print('Esta bien validado');
+      //_insert(nameCtrl.text,mobileCtrl.text,gender.toString(),emailCtrl.text,passwordCtrl.text,repeatPassCtrl.text);
       //keyForm.currentState.reset();
     }
   }
